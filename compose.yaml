@@ -1,0 +1,22 @@
+services:
+  pipeline:
+    build: .
+    volumes: ["lake:/lake"]
+  airflow:
+    profiles: ["airflow"]
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
+    command: standalone
+    ports: ["127.0.0.1:8082:8080"]
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      PIPELINE_INPUT: /opt/airflow/input
+      PIPELINE_LAKE: /opt/airflow/lake
+    volumes:
+      - ./dags:/opt/airflow/dags:ro
+      - ./samples:/opt/airflow/input:ro
+      - airflow-data:/opt/airflow/lake
+volumes:
+  lake:
+  airflow-data:
