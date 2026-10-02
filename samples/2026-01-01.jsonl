@@ -1,0 +1,4 @@
+{"event_id": "evt-1", "order_id": "order-1", "customer_id": "customer-1", "amount_cents": "2500", "currency": "USD", "event_time": "2026-01-01T12:00:00Z", "updated_at": "2026-01-01T12:00:00Z"}
+{"event_id": "evt-1", "order_id": "order-1", "customer_id": "customer-1", "amount_cents": "2500", "currency": "USD", "event_time": "2026-01-01T12:00:00Z", "updated_at": "2026-01-01T12:00:00Z"}
+{"event_id": "evt-2", "order_id": "order-2", "customer_id": "customer-1", "amount_cents": "1000", "currency": "USD", "event_time": "2026-01-01T12:00:00Z", "updated_at": "2026-01-01T12:00:00Z"}
+{"event_id": "bad", "order_id": "order-1", "customer_id": "customer-1", "amount_cents": "-10", "currency": "USD", "event_time": "2026-01-01T12:00:00Z", "updated_at": "2026-01-01T12:00:00Z"}
