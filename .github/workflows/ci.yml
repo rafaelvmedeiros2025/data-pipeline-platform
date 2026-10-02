@@ -1,0 +1,22 @@
+name: CI
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - run: pip install -r requirements.txt
+      - run: python -m pytest -q
+      - run: python -m pipeline.run --source samples/2026-01-01.jsonl --lake lake --date 2026-01-01
+      - run: docker build -t data-pipeline-platform .
+      - run: docker build -f Dockerfile.airflow -t data-pipeline-airflow .
+      - run: docker run --rm -v "$PWD/dags:/opt/airflow/dags:ro" --entrypoint python data-pipeline-airflow -c "from airflow.models import DagBag; b=DagBag('/opt/airflow/dags', include_examples=False); assert not b.import_errors"
