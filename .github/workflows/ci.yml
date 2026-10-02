@@ -18,5 +18,7 @@ jobs:
       - run: python -m pytest -q
       - run: python -m pipeline.run --source samples/2026-01-01.jsonl --lake lake --date 2026-01-01
       - run: docker build -t data-pipeline-platform .
+      - run: docker run --rm data-pipeline-platform
       - run: docker build -f Dockerfile.airflow -t data-pipeline-airflow .
-      - run: docker run --rm -v "$PWD/dags:/opt/airflow/dags:ro" --entrypoint python data-pipeline-airflow -c "from airflow.models import DagBag; b=DagBag('/opt/airflow/dags', include_examples=False); assert not b.import_errors"
+      - run: docker run --rm -v "$PWD/dags:/opt/airflow/dags:ro" --entrypoint python data-pipeline-airflow -c "from airflow.models import DagBag; b=DagBag('/opt/airflow/dags', include_examples=False); assert not b.import_errors; assert 'orders_daily' in b.dags"
+      - run: docker run --rm -v "$PWD/samples:/input:ro" -v airflow-smoke-lake:/opt/airflow/lake --entrypoint python data-pipeline-airflow -m pipeline.run --source /input/2026-01-01.jsonl --lake /opt/airflow/lake --date 2026-01-01
